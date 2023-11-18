@@ -65,6 +65,46 @@ MySQL 5.5 开始默认的存储引擎就是 InnoDB, 是第一个支持完整 ACI
 脏页：缓冲池上的页和内存中的页数据产生了不一致
 Flush 列表存储脏页，执行后台线程将 flush 列表中脏页异步刷新到磁盘
 <mark style="background: #ABF7F7A6;">注意：LRU 列表中也会有脏页，当 LRU 中的脏页达到一定比例时，会触发 checkppoint 机制将脏页刷新到磁盘</mark>
+InnoDB 存储引擎的内存区域除了有缓冲池外，还有 redo log 缓冲，redo log 只记录事务日志，用来恢复数据，保障持久性
+### Checkpoint 技术
+Checkpoint 解决的问题：
+- 缩短数据库恢复时间
+- 缓冲池不够用时，将脏页刷新到磁盘
+- 重做日志不可用时，刷新脏页
+当数据库突然发生了宕机，不需要将 redo log 所有日志都刷新一遍，只需要将 chectpoint 标记之后的刷新到磁盘就行了，<mark style="background: #ABF7F7A6;">所以 checkpoint 是已刷新页的标记</mark>
+在 InnoDB 引擎中有两种执行 checkpoint 的方式：
+- Sharp Checkpoint: 数据库关闭时，将所有脏页刷新到磁盘
+- Fuzzy Checkpoint: 每次只刷新一部分脏页，而不是刷新所有脏页回磁盘
+### InnoDB 关键特性
+#### 插入缓冲
+对于非聚集索引的插入或更新操作，不是每一次都直接插入到索引页中，而是先判断插入的索引页是否在缓冲池中，若在，则直接插入，若不在，就先放入一个 Insert Buffer 中，<mark style="background: #ABF7F7A6;">欺骗数据库已经将索引插入到叶子结点 (其实还没有)</mark>
+<mark style="background: #FFB86CA6;">那 Insert Buffer 有什么作用？</mark>
+简而言之就是将多个插入操作进行合并，同时操作一个索引页，大大提高了插入的效率
+<mark style="background: #FFB86CA6;">使用 Insert Buffer 有什么条件？</mark>
+- 索引是辅助索引
+- 索引不是唯一的
+#### 两次写
+如果说 Insert Buffer 给 InnoDB 带来了性能上的提升，那么 DoubleWrite 就给 InnoDB 带来了数据页的可靠性
+<mark style="background: #FFB86CA6;">Double Write 有什么作用？</mark>
+<mark style="background: #ABF7F7A6;">因为存储引擎缓冲池内的数据页大小默认为16KB，而文件系统一页大小为4KB</mark>，所以在进行刷盘操作时，就有可能发生如下场景：
+![[Pasted image 20231118123550.png]]
+如图所示，数据库准备刷新脏页时，需要四次 IO 才能将16KB 的数据页刷入磁盘。
+但当执行完第二次IO时，数据库发生意外宕机，导致此时才刷了2个文件系统里的页，这种情况被称为写失效（partial page write）。
+此时重启后，磁盘上就是不完整的数据页，就算使用 redo log 也是无法进行恢复的。所以 InnoDB 就提出了 Double Wirte 的特性来保障数据完整性
+<mark style="background: #ABF7F7A6;">其实就是在重做日志前，用户需要一个页的副本，当写入失效发生时，先通过页的副本来还原该页，再进行重做，这就是 double write。</mark>
+![[Pasted image 20231118124449.png]]
+如图，如果操作系统在将页写入磁盘的过程中发生了崩溃，在恢复过程中，InnoDB 存储引擎可以从共享表空间中的 Double write 中找到该页的一个副本，将其复制到表空间文件，再应用重做日志。
+#### 自适应哈希
+哈希是一种非常快的查找算法，一般情况下查找的时间复杂度为 O (1), B+树的查找取决于树的高度 
+<mark style="background: #D2B3FFA6;">InnoDB 存储引擎会监控对表上各个索引页的查询，如果观察到可以通过哈希索引来提高速度，则建立哈希索引，称之为自适应哈希索引，这个过程是由 InnoDB 引擎完成的，用户不能自己创建哈希索引
+</mark>
+#### 异步 IO
+为提高数据库磁盘操作性能，采用异步 IO 的方式进行磁盘交互
+<mark style="background: #D2B3FFA6;">与异步 IO 对应的是同步 IO, 当用户发出一条索引扫描的 SQL, 那可能就需要扫描多个页，只有扫描完前面一个才能扫描后面一个页，这是没有必要的，可以多个线程同时对不同的页进行扫描，实现异步 IO</mark>
+#### 刷新邻接页
+<mark style="background: #D2B3FFA6;">当刷新一个脏页时，InnoDB 存储引擎会检测该页所在区的所有页，如果存在脏页，那么就一并刷新</mark>
+
+
 
 
 

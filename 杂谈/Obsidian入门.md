@@ -47,21 +47,127 @@ public class Hello{
 >Ctrl+l: 任务列表
 >F6: 跳出悬浮窗
 ><mark style="background: [[FFB86CA6]];">在[]加-: 折叠标注</mark>
+>Ctrl+shift+v: 取出选中内容空行
 
 > [!info] Title
-> Contents
-> 
-> >嵌套
-> >
+> >asd
+>>```
+> >class Solution {
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        int left=0;//记录窗口最左的下标
+        int result=Integer.MAX_VALUE;//窗口初始大小
+        int sum=0;//记录窗口中值的和
+        for(int right=0;right<nums.length;right++){
+            sum+=nums[right];//扩大窗口，增值
+            while(sum>=target){//循环缩小窗口至sum小于目标值
+                result=Math.min(result,right-left+1);//判断出出窗口最小长度
+                sum-=nums[left++];//窗口缩小同时sum要减小
+            }
+        }
+        return result==Integer.MAX_VALUE?0:result;
+    }
+}
 
-> [!NOTE]- Title
-> Contents
+```java
+class Solution {
+
+    public int search(int[] nums, int target) {
+
+        if(target<nums[0]||target>nums[nums.length-1]){//因为是有序数组，当目标值不在数组范围内就直接返
+
+            return -1;
+        }
+        int left=0;//左指针
+        int right=nums.length-1;//右指针
+        while(left<=right){//左闭右闭模式
+            int mid=(left+right) >> 1;//右移一位相当于除以二，这种速度更快
+            if(target<nums[mid]){//目标值在左边，缩小右边上限
+                right=mid-1;
+            }else if(target>nums[mid]){//目标值在右边，提升左边下限
+                left=mid+1;
+            }else{//找到目标值
+                return mid;
+            }
+        }
+        //循环结束，未找到
+        return -1;
+    }
+}
+```
+> class Solution {
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        int left=0;//记录窗口最左的下标
+        int result=Integer.MAX_VALUE;//窗口初始大小
+        int sum=0;//记录窗口中值的和
+        for(int right=0;right<nums.length;right++){
+            sum+=nums[right];//扩大窗口，增值
+            while(sum>=target){//循环缩小窗口至sum小于目标值
+                result=Math.min(result,right-left+1);//判断出出窗口最小长度
+                sum-=nums[left++];//窗口缩小同时sum要减小
+            }
+        }
+        return result==Integer.MAX_VALUE?0:result;
+    }
+}
+
+  
+
+}
+>
+>
 > 
 
 
 
 > [!这是标注] 这是标注
-> Contents
+>```java
+>	class Solution {
+>
+    public int search(int[] nums, int target) {
+>
+  >      if(target<nums[0]||target>nums[nums.length-1]){//因为是有序数组，当目标值不在数组范围内就直接返回
+>
+            return -1;
+>
+        }
+>
+        int left=0;//左指针
+>
+        int right=nums.length-1;//右指针
+>
+        while(left<=right){//左闭右闭模式
+>
+            int mid=(left+right) >> 1;//右移一位相当于除以二，这种速度更快
+>
+            if(target<nums[mid]){//目标值在左边，缩小右边上限
+>
+                right=mid-1;
+>
+            }else if(target>nums[mid]){//目标值在右边，提升左边下限
+
+                left=mid+1;
+
+            }else{//找到目标值
+
+                return mid;
+
+            }
+
+        }
+
+        //循环结束，未找到
+
+        return -1;
+
+    }
+
+  
+
+}
+>```
+> 
 
 %% 这是注释 %%`
 

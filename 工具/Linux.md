@@ -82,16 +82,18 @@ Ls 常用参数：
 从左往右各标识的含义：<mark style="background: #ABF7F7A6;">文件类型标识符，权限访问位，硬链接数，文件属主，文件属组，大小，修改时间，文件名</mark>
 Ls 支持通配符：
 
-| 通配符    | 含义                                        |
-| --------- | ------------------------------------------- |
-| *         | 代表文件名中的所有字符                      |
-| ls te*    | 查找已 te 开头的文件                        |
-| ?         | 代表文件名中的任意一个字符                  |
-| ls ?. C   | 第一个字符任意，后缀为. C 的文件            |
-| ls [abc]  | 匹配 abc 中任意一个                         |
-| ls [a-f]* | 从 a-f 中任意一个字符开头的文件             |
-| \         | 如果要使用通配符作为普通字符使用，在前面加\ |
-| ls \*a    | 查找名为*a 的文件                           |
+| 通配符 | 含义 |
+| ---- | ---- |
+| * | 代表文件名中的所有字符 |
+| ls te* | 查找已 te 开头的文件 |
+| ? | 代表文件名中的任意一个字符 |
+| ls ?. C | 第一个字符任意，后缀为. C 的文件 |
+| ls [abc] | 匹配 abc 中任意一个 |
+| ls [a-f]* | 从 a-f 中任意一个字符开头的文件 |
+| \ | 如果要使用通配符作为普通字符使用，在前面加\ |
+| ls \*a | 查找名为*a 的文件 |
+|  |  |
+|  |  |
 #### 文件访问权限
 - 读权限 (r): 对于文件，用户可以<mark style="background: #FF5582A6;">读取</mark>文件内容，对于目录，用户具有<mark style="background: #FF5582A6;">浏览目录</mark>的权限
 - 写权限 (w): 对于文件，用户可以<mark style="background: #FF5582A6;">修改文件</mark>的内容，对于目录，用户具有<mark style="background: #FF5582A6;">删除，移动</mark>目录下文件的权限
@@ -418,14 +420,14 @@ sudo find . -name "[a-z][A-Z][0-9][0-9].doc"
 将文件或目录复制到另一个文件或目录中
 操作：`cp [参数] source path`
 
-| 参数 | 含义                                         |
-| ---- | -------------------------------------------- |
+| 参数 | 含义 |
+| ---- | ---- |
 | `-a` | 通常在复制目录时使用，保留文件属性并递归复制 |
-| `-i` | 交互式确认                                   |
-| `-r` | 递归复制目录下的所有文件                     |
-| `-v` | 显示拷贝进度                                 |
-| `-l` | 创建硬链接                                   |
-| `-u` | 文件更新，目标文件比源文件旧更新             |
+| `-i` | 交互式确认 |
+| `-r` | 递归复制目录下的所有文件 |
+| `-v` | 显示拷贝进度 |
+| `-l` | 创建硬链接 |
+| `-u` | 文件更新，目标文件比源文件旧更新 |
 
 #### 移动文件和重命名：mv
 **移动文件：**`mv [参数] source path`
@@ -1010,3 +1012,598 @@ u v w x y z
 # cat test.txt | xargs
 a b c d e f g h i j k l m n o p q r s t u v w x y z
 ```
+
+## Linux 命令练习
+***
+### 常用命令
+1. 进入到用户主目录
+```shell
+cd ~
+```
+2. 查看当前所在目录
+```shell
+yhk@yhk-virtual-machine:~$ pwd
+/home/yhk
+```
+3. 查看当前用户主目录下的所有文件，目录（包括隐藏文件）
+```shell
+ls -la
+```
+4. 在根目录下创建一个 hadoop 文件夹
+```shell
+sudo mkdir /hadoop
+```
+5. 在 hadoop 目录下创建 src 和 webroot 文件夹
+```shell
+sudo mkdir /hadoop/{src,webroot}
+```
+6. 进入到 hadoop 目录下，创建 .classpath 文件和 README 文件
+```shell
+cd /hadoop
+sudo touch {.classpath,README}
+```
+7. 查看 hadoop 目录下所有文件
+```shell
+ls -la
+```
+8. 在 hdoop 目录下创建一个 test. Txt 文件，并写入"this is test"
+```shell
+echo "this is test" > test.txt
+```
+9. 查看 test. Txt 的内容
+```shell
+cat test.txt
+```
+10. 向 README 文件追加"please read me first"
+```shell
+echo "please read me first" >> README
+```
+11. 将 test. Txt 中的内容追加到 README 中
+```shell
+cat test.txt >> README
+```
+12. 拷贝 hadoop 目录下所有文件到/hadoop-bak 中
+```shell
+cp -r /hadoop /hadoop-bak
+```
+13. 进入/hadoop-bak 目录下，将 test. Txt 文件移动到 src 目录下，并重命名为 Student. Java
+```shell
+sudo mv test.txt src/Student.java
+```
+14. 在 src 目录下创建一个 struct. Xml 文件
+```shell
+sudo touch struct.xml
+```
+15. 删除所有 xml 文件
+```shell
+sudo rm -rf *.xml
+```
+16. 删除 hadoop-bak 目录及其以下所有文件
+```shell
+sudo rm -rf /hadoop-bak
+```
+17. 返回 hadoop 目录，查看 README 有多少个单词，多少行
+```shell
+cd /hadoop
+wc -w README
+wc -l README
+```
+18. 返回根目录，将 hadoop 目录打包，然后再用 gzip 压缩
+```shell
+sudo tar hadoop.tar.gz hadoop
+```
+19. 将 hadoop. Tar. Gz 解压并解档
+```shell
+sudo tar -zxvf hadoop.tar.gz
+```
+20. 将 hadoop 目录打包，并用 bzip 2 压缩，保存到 tmp 目录下
+```shell
+sudo tar -jcvf /tmp/hadoop.tar.bz2 hadoop
+```
+21. 将 hadoop. Tar. Bz 2 解压并解档到 usr 目录下
+```shell
+sudo tar hadoop.tar.bz2 -C /usr
+```
+### 系统命令
+1. 查看主机名
+```shell
+hostname
+```
+2. 修改主机名（重启后无效）
+```shell
+hoastname moresuo
+```
+3. 修改主机名（永久生效）
+```shell
+vim /etc/sysconfig/network
+```
+4. 修改 IP (重启后无效)
+```shell
+sudo ifconfig eth0 ip
+```
+5. 修改 IP (重启后永久生效)
+```shell
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+```
+6. 查看系统信息
+```shell
+uname -a
+uname -r
+```
+7. 查看 id 命令
+```shell
+id -u
+id -g
+```
+8. 查看当前日期
+```shell
+date
+```
+9. 日历
+```shell
+cal
+```
+10. 查看文件信息
+```shell
+file filename
+```
+11. 查看文件大小
+```shell
+du -h server.c
+du -ah net #列出目录下所有文件大小
+```
+12. 查看分区
+```shell
+df -h
+```
+13. .ssh
+```shell
+ssh moresuo@192.168.10.133
+```
+### 用户和组
+1. 添加一个用户 tom, 将他纳入 user 组，并添加注释信息
+```shell
+sudo useradd -g user -c "hr tom" tom
+```
+2. 设置 tom 用户密码
+```shell
+sudo passwd tom
+```
+3. 将 tom 的用户名修改为 tomcat
+```shell
+sudo usermod -l tomcat tom
+```
+4. 将 tomcat 添加到 sys, root 组
+```shell
+sudo usermod -G sys,root tomcat
+```
+5. 查看 tomcat 组信息
+```shell
+groups tomcat
+```
+6. 添加一个 jerry 用户并设置密码
+```shell
+sudo useradd jerry
+sudo passwd jerry
+```
+7. 添加一个 america 组
+```shell
+sudo groupadd america
+```
+8. 将 jerry 添加到 america 组
+```shell
+sudo usermod -g america jerry
+```
+9. 将 tomcat 从 root 组和 sys 组删除
+```shell
+sudo gpasswd -d tomcat root
+sudo gpasswd -d tomcat sys
+```
+10. 将 america 组改为 am
+```shell
+sudo groupmod -n am america
+```
+
+### 权限
+1. 创建 a.txt 文件和 b.txt 文件，并将他们拥有者和所在组设置为可写入，其他人不可写入
+```shell
+touch {a.txt,b.txt}
+chmod ug+w,o-w a.txt b.txt
+```
+2. 创建 c.txt 所有人都可写和执行
+```shell
+touch c.txt
+chmod a=wx c.txt
+```
+3. 将 hadoop 目录下的所有文件设置为所有人可读
+```shell
+sudo chmod -R a+r /hadoop
+```
+4. 将/hadoop 目录下的所有文件与子目录的拥有者设为 root，用户拥有组为 users
+```shell
+sudo chown -R root:users /hadoop
+```
+5. 将当前目录下的所有文件与子目录的用户皆设为 hadoop，组设为 users
+```shell
+chown -R hadoop:users *
+```
+### 查找
+1. 查找可执行的命令
+```shell
+which ls
+```
+2. 查找可执行命令的位置
+```shell
+whereis ls
+```
+3. 查找 a.txt 文件
+```shell
+locate a.txt
+```
+4. 从当前目录下开始查找 a.txt 文件
+```shell
+find . -name "a.txt"
+```
+5. 从当前目录下查找 a.txt 文件，并删除
+```shell
+find . -name "a.txt" -exec rm {} \;
+```
+6. 查找用户为 yhk 的文件
+```shell
+find -user yhk
+```
+7. 查找用户为 yhk，拥有组为 root 的文件
+```shell
+find -user yhk -a -group root 
+```
+8. 查找用户为 yhk 或者 (-o)拥有组为 root 并且是文件夹类型的文件
+```shell
+find -user yhk -o group root -a -type d
+```
+9. 查找权限为 777 的文件
+```shell
+find perm 777
+```
+10. 显示命令历史
+```shell
+history
+```
+### 打包与压缩
+1. 用 gzip 将 b.txt 压缩
+```shell
+gzip b.txt
+```
+2. 将 b.txt 解压
+```shell
+gunzip b.txt
+gzip -d b.txt
+```
+3. 用 bzip 2 将 b.txt 压缩
+```shell
+bzip2 b.txt
+```
+4. 将 b.txt 解压
+```shell
+bzip2 -d b.txt.bz2
+```
+5. 将当前目录下的文件打包
+```shell
+tar -cvf bak.tar .
+```
+6. 将/etc/passwd 追加到 bak. Tar 中
+```shell
+tar -rvf bak.tar /etc/passwd
+```
+7. 将 bak. Tar 解档
+```shell
+tar -xvf bak.tar
+```
+8. 将 vmvare 目录打包并压缩
+```shell
+tar -zcvf vmvare.tar.gz vmvare
+```
+9. 将 vmvare. Tar. Gz 解压到/usr 下
+```shell
+sudo tar -zxvf vmvare.tar.gz -C /usr
+```
+10. 查看压缩包内容
+```shell
+tar -ztvf vmvare.tar.gz
+```
+### 输入输出重定向
+1. 将错误信息存入 error. Txt
+```shell
+find /etc -name qwe.txt 2> error.txt
+```
+2. 将正确信息和错误信息都存入 log. Txt 文件中
+```shell
+find /etc -name "passwd" &> /tmp/log.txt
+```
+3. 查看/etc 下的目录有多少个
+```shell
+ls -l | grep "^d" | wc -l
+```
+4. 查看/etc 下的目录有多少个，并将文件详情输入到 result. Txt 中
+```shell
+ls -l /etc | grep "^d" | tee result.txt | wc -l
+```
+### 进程控制
+1. 查看用户最近登录情况
+```shell
+lastlog
+```
+2. 查看硬盘使用情况
+```shell
+df -h
+```
+3. 查看文件大小
+```shell
+du -h filename
+du -ah dir
+```
+4. 查看内存使用情况
+```shell
+free -h
+```
+5. 查看日志
+```shell
+ls /var/log
+```
+6. 实时查看进程运行情况
+```shell
+top
+```
+### 设置或显示环境变量：export
+在 shell 中执行程序时，shell 会提供一组环境变量。export 可新增，修改或删除环境变量，供后续执行的程序使用。
+<mark style="background: #ABF7F7A6;">export 的效力仅限于该次登陆操作</mark>
+操作：`export [-fnp][变量名称]=[变量设置值]`
+### 批量添加用户
+#### 与用户账号有关的系统文件
+完成用户管理的工作本质都是对有关的系统文件进行修改，这些系统文件包括<mark style="background: #FF5582A6;">/etc/passwd, /etc/shadow, /etc/group</mark>等
+- **etc/passwd 记录的基本属性**
+```bash
+＃ cat /etc/passwd
+root:x:0:0:Superuser:/:
+daemon:x:1:1:System daemons:/etc:
+bin:x:2:2:Owner of system commands:/bin:
+sys:x:3:3:Owner of system files:/usr/sys:
+adm:x:4:4:System accounting:/usr/adm:
+uucp:x:5:5:UUCP administrator:/usr/lib/uucp:
+auth:x:7:21:Authentication administrator:/tcb/files/auth:
+cron:x:9:16:Cron daemon:/usr/spool/cron:
+listen:x:37:4:Network daemon:/usr/net/nls:
+lp:x:71:18:Printer administrator:/usr/spool/lp:
+sam:x:200:50:Sam san:/home/sam:/bin/sh
+```
+- /etc/passwd 中一行记录对应着一个用户，每行记录又被冒号 (:)分隔为 7 个字段，其格式和具体含义如下：
+- `用户名:口令:用户标识号:组标识号:注释性描述:主目录:登录Shell`
+	- 用户名：通常长度不超过 8 个字符，由大小写字母和/或数字组成，不能有冒号 (:)。登录名中不能有冒号 (:)，因为冒号在这里是分隔符。为了兼容起见，登录名中最好不要包含点字符 (.)，并且不使用连字符 (-)和加号 (+)打头
+	- 口令：本身存放用户口令的加密串，但现在许多 Linux 系统都使用了 shadow 技术，把真正的加密后的用户口令字存放到/etc/shadow文件中，而/etc/passwd文件的口令字段中只存放一个特殊的字符，例如“x”或者“*”
+	- 用户标识符：是一个整数，系统内部用它来标识用户。一般情况下它与用户名是一一对应的，如果几个用户名对应的用户标识号是一样的，系统内部将把它们视为同一个用户，但是它们可以有不同的口令、不同的主目录以及不同的登录 Shell 等。通常用户标识号的取值范围是 0～65 535。0 是超级用户 root 的标识号，1～99 由系统保留，作为管理账号，普通用户的标识号从100开始
+	- 组标识符：记录用户所属的用户组，对应着/etc/group 文件中的一条记录
+	- 注释性描述：一段任意编写的注释，创建账户时可以通过 useradd -c 用户名的 -c 参数指定
+	- 主目录：用户登录之后所处的目录
+	- 登录 shell: 用户登录后，要启动一个进程，负责将用户的操作传给内核，这个进程是用户登录到系统后运行的命令解释器或某个特定的程序，即 Shell. <mark style="background: #FF5582A6;">Shell 是用户与 Linux 系统之间的接口</mark>。Linux 的 Shell 有许多种，每种都有不同的特点。常用的有 sh (Bourne Shell), csh (C Shell), ksh (Korn Shell), tcsh (TENEX/TOPS-20 type C Shell), bash (Bourne Again Shell)等, 可以通过 usermod 的 -s 参数为用户指定某个 Shell。如果 useradd 不通过 -s 参数指定 shell，那么系统使用 bash 为默认的登录 Shell，即这个字段的值为/bin/bash
+
+ - **伪用户**：这些用户的登陆 shell 为/usr/sbin/nologin，即不能登录。它们的存在主要是方便系统管理，满足相应的系统进程对文件属主的要求
+```shell
+bin 拥有可执行的用户命令文件
+sys 拥有系统文件
+adm 拥有帐户文件
+uucp UUCP使用
+lp lp或lpd子系统使用
+nobody NFS使用
+```
+
+- **etc/shadow**
+- 对安全性要求较高的 Linux 系统都把/etc/passwd 文件中的<mark style="background: #FF5582A6;">口令字段</mark>保存在/etc/shadow 文件中，超级用户才拥有该文件读权限
+- /etc/shadow 中的记录行与/etc/passwd 中的一一对应，它由 pwconv 命令根据/etc/passwd 中的数据自动产生
+- `登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间:失效时间:标志`
+	- 登录名：与/etc/passwd 文件中的登录名相一致的用户账号
+	- 加密口令："口令"字段存放的是加密后的用户口令字，长度为 13 个字符。如果为空，则对应用户没有口令，登录时不需要口令；如果含有不属于集合 { ./0-9 A-Za-z }中的字符，则对应的用户不能登录
+	- 最后一次修改时间："最后一次修改时间"表示的是从某个时刻起，<mark style="background: #FF5582A6;">到用户最后一次修改口令时的天数</mark>。大部分 linux 系统的时间起点是 1970 年 1 月 1日
+	- 最小时间间隔：两次修改口令之间所需的最小天数
+	- 最大时间间隔：口令保持有效的最大天数
+	- 警告时间：表示的是从系统开始警告用户到用户密码正式失效之间的天数
+	- 不活动时间：是用户没有登录活动但账号仍能保持有效的最大天数
+	- 失效时间：字段给出的是一个绝对的天数，如果使用了这个字段，那么就给出相应账号的生存期。期满后，该账号就不再是一个合法的账号，也就不能再用来登录了
+
+- **etc/group 记录用户组信息**
+- 每个用户都属于某个用户组；一个组中可以有多个用户，一个用户也可以属于不同的组
+- 当一个用户同时是多个组中的成员时，在/etc/passwd 文件中记录的是用户所属的<mark style="background: #FF5582A6;">主组</mark>，也就是<mark style="background: #FF5582A6;">登录时所属的默认组</mark>，而其他组称为<mark style="background: #FF5582A6;">附加组</mark>
+- 用户组的所有信息都存放在/etc/group 文件中，字段有：
+- `组名:口令:组标识号:组内用户列表`
+	- 组名："组名"是用户组的名称，由字母或数字构成。与/etc/passwd 中的登录名一样，组名不应重复
+	- 口令：存放的是用户组加密后的口令字。一般 Linux 系统的用户组都没有口令，即这个字段一般为空，或者是*。
+	- 组标识符：与用户标识号类似，也是一个整数，被系统内部用来标识组
+#### 实操
+**创建一个用户文本文件 user. Txt，格式要和 etc/passwd 一致**
+```
+user001::601:100:user:/home/user001:/bin/bash
+user002::602:100:user:/home/user002:/bin/bash
+user003::603:100:user:/home/user003:/bin/bash
+user004::604:100:user:/home/user004:/bin/bash
+user005::605:100:user:/home/user005:/bin/bash
+user006::606:100:user:/home/user006:/bin/bash
+```
+**将 user. Txt 的用户信息存入 /etc/passwd 中**
+```shell
+sudo newusers < user.txt
+```
+**取消 shodow passwd 功能**
+将 /etc/shadow 产生的 shadow 密码解码，然后回写到 /etc/passwd 中，并将 /etc/shadow 的 shadow 密码栏删掉。这是为了方便下一步的密码转换工作，即先取消 shadow password 功能
+```shell
+sudo pwunconv
+```
+**创建一个 passwd. Txt 文件保存用户和密码**
+```shell
+user001:123456
+user002:123456
+user003:123456
+user004:123456
+user005:123456
+user006:123456
+```
+**执行 /usr/sbin/chpasswd 命令**
+执行 chpasswd 命令会将对应的用户密码写入/etc/passwd 中, 并且是以加密的方式存入
+```shell
+chpasswd < passwd.txt
+```
+**将密码存入/etc/shadow 中**
+```shell
+pwconv
+```
+### Crontab 的使用
+crontab 命令是 cron table 的简写，它是 cron 的配置文件，也可以叫它作业列表。
+**相关配置文件：**
+- /var/spool/cron/ 目录下存放的是每个用户包括 root 的 crontab 任务，每个任务以创建者的名字命名
+- /etc/crontab 这个文件负责调度各种管理和维护任务
+- /etc/cron. D/ 这个目录用来存放任何要执行的 crontab 文件或脚本
+- 还可以把脚本放在/etc/cron. Hourly、/etc/cron. Daily、/etc/cron. Weekly、/etc/cron. Monthly 目录中，让它每小时/天/星期、月执行一次
+**命令格式：**
+```shell
+crontab [ -u user ] { -l | -r | -e }
+crontab [ -u user ] { -l | -r | -e }
+//省略用户表表示操作当前用户的crontab
+-e (编辑工作表)
+-l (列出工作表里的命令)
+-r (删除工作表)
+```
+`crontab -e` 进入当前用户的工作表编辑，是常见的 vim 界面。每行是一条命令
+crontab 的命令构成为时间+动作，其时间有<mark style="background: #FF5582A6;">分、时、日、月、周</mark>五种，操作符有
+- * 取值范围内的所有数字
+- / 每过多少个数字
+- - 从 X 到Z
+- ，散列数字
+**基本格式**
+```shell
+f1 f2 f3 f4 f5 command
+分 时 日 月 周 命令
+第1列表示分钟0～59 每分钟用*或者 */1表示
+第2列表示小时0～23（0表示0点）
+第3列表示日期1～31
+第4列表示月份1～12
+第5列标识号星期0～6（0表示星期天）
+第6列要运行的命令
+```
+- 其中 f 1 是表示分钟，f 2 表示小时，f 3 表示一个月份中的第几日，f 4 表示月份，f 5 表示一个星期中的第几天。Command 表示要执行的命令。
+- 当 f 1 为 * 时表示每分钟都要执行 program，f 2 为 * 时表示每小时都要执行程序，以此类推
+- 当 f 1 为 a-b 时表示从第 a 分钟到第 b 分钟这段时间内要执行，f 2 为 a-b 时表示从第 a 到第 b 小时都要执行，以此类推
+- 当 f 1 为 \*/n 时表示每 n 分钟个时间间隔执行一次，f 2 为 \*/n 表示每 n 小时个时间间隔执行一次，以此类推
+- 当 f 1 为 a, b, c,... 时表示第 a, b, c,... 分钟要执行，f 2 为 a, b, c,... 时表示第 a, b, c... 个小时要执行，以此类推
+
+<mark style="background: #FFB86CA6;">案例：在 12 月内, 每天的早上 6 点到 12 点，每隔 3 个小时 0 分钟执行一次 /usr/bin/backup</mark>
+```shell
+0 6-12/3 * 12 * /usr/bin/backup
+```
+<mark style="background: #FFB86CA6;">周一到周五每天下午 5:00 寄一封信给 alex@domain.name </mark>
+```shell
+0 17 * * 1-5 mail -s "hi" alex@domain.name < /tmp/maildata
+```
+<mark style="background: #FFB86CA6;">每月每天的午夜 0 点 20 分, 2 点 20 分, 4 点 20 分....执行 echo "haha"</mark>
+```shell
+20 0,2,4 * * * echo "haha"
+```
+<mark style="background: #FFB86CA6;">每月1、10、22日的4 : 45重启 smb</mark>
+```shell
+45 4 1,10,22 * * /etc/init.d/smb restart
+```
+<mark style="background: #FFB86CA6;">每周六、周日的1 : 10重启 smb</mark>
+```shell
+10 1 * * 0,6 /etc/init.d/smb restart
+```
+<mark style="background: #FFB86CA6;">每天18 : 00至23 : 00之间每隔30分钟重启 smb</mark>
+```shell
+*/30 18-23 * * * /etc/init.d/smb restart
+```
+<mark style="background: #FFB86CA6;">每星期六的晚上11 : 00 pm 重启 smb</mark>
+```shell
+0 23 * * 6 /etc/init.d/smb restart
+```
+<mark style="background: #FFB86CA6;">每一小时重启 smb</mark>
+```shell
+0 */1 * * * /etc/init.d/smb restart
+```
+<mark style="background: #FFB86CA6;">晚上11点到早上7点之间，每隔一小时重启 smb</mark>
+```shell
+0 */1 23-7/1 * * /etc/init.d/smb restart
+```
+
+**环境变量问题**
+有时创建了一个 crontab，但是这个任务却无法自动执行，而手动执行这个任务却没有问题，这种情况一般是由于在 crontab 文件中没有配置环境变量引起的
+所以注意如下3点：
+- 脚本中涉及文件路径时写全局路径
+- 脚本执行要用到 java 或其他环境变量时，通过 source 命令引入环境变量，如：
+```shell
+cat start_cbp.sh
+#!/bin/sh
+source /etc/profile
+export RUN_CONF=/home/d139/conf/platform/cbp/cbp_jboss.conf
+/usr/local/jboss-4.0.5/bin/run.sh -c mev &
+```
+- 当手动执行脚本 OK，但是 crontab 死活不执行时，可以尝试在 crontab 中直接引入环境变量解决问题。如：
+```shell
+0 * * * * . /etc/profile;/bin/sh /var/www/java/audit_no_count/bin/restart_audit.sh
+```
+### 三种特殊权限
+#### Suid
+**功能：临时使用命令的属主权限执行该命令**，即如果文件有 suid 权限时，那么普通用户去执行该文件时，会以该文件的所属用户的身份去执行
+SetUID（简写 suid）：<mark style="background: #FF5582A6;">会在属主权限位的执行权限上写个 s</mark>。如果该属主权限位上有执行权限，则会在属主权限位的执行权限上写个 s（小写）；如果该属主权限位上没有执行权限，则会在属主权限位的执行权限上写个 S（大写）
+<mark style="background: #ABF7F7A6;">suid 数字权限是4000</mark>,设置方法：
+```shell
+方式1：
+[root@centos7 ~]# chmod u+s filename
+方式2：
+[root@centos7 ~]# chmod 4755 filename
+```
+<mark style="background: #ABF7F7A6;">查看 passwd 命令的权限：</mark>
+```shell
+`[root@localhost ftl]``# ll /usr/bin/passwd ` `问题： ``passwd``文件的属组是root,表示只有
+root用户可以访问的文件，为什么普通用户依然可以使用该命令更改自己的密码？``答案：当普通用户[omd]使用
+``passwd``命令的时候，系统看到``passwd``命令文件的属性有大写s后，表示这个命令的属主权限被omd用户获得,
+也就是omd用户获得文件``/etc/shadow``的root的rwx权限
+```
+由于 passwd 具有 s 权限，普通用户使用该命令的时候，就会以该命令的属主身份 root 执行该命令，于是能够顺利修改普通用户不具备修改权限的 /etc/shadow 文件
+**SetUID（简称 suid）总结：**
+- 让普通用户对可执行的二进制文件，临时拥有二进制文件的属主权限
+- 如果设置的二进制文件没有执行权限，那么 suid 的权限显示就是 S（大写字母 S）
+- 特殊权限 suid 仅对二进制可执行程序有效，其他文件或目录则无效
+- Suid 极其危险，如果给 vim 或者 rm 命令设置了 setUID，那么任何文件都能编辑或者删除了，相当于有 root 权限了
+#### Sgid
+**命令功能**：使用 sgid 可以使得多个用户之间共享一个目录的所有文件变得简单。<mark style="background: #FF5582A6;">当某个目录设置了 sgid 后，在该目录中新建的文件不在是创建该文件的默认所属组</mark>
+如果该属组权限位上有执行权限，则会在属组主权限位的执行权限上写个 s（小写字母）；如果该属组权限位上没有执行权限，则会在属组主权限位的执行权限上写个 S（大写字母 S）
+<mark style="background: #ABF7F7A6;">sgid 数字权限是2000，设置方法：</mark>
+```shell
+方式1：
+[root@VM_0_9_centos ~]# chmod 2755 test/
+方式2：
+[root@VM_0_9_centos ~]# chmod g+s test/
+[root@VM_0_9_centos ~]# ll -d test/
+drwxr-sr-x 2 root root 4096 Nov 22 21:02 test/
+```
+#### Sbit 沾滞位
+**命令功能**：粘滞位，只对目录有效，对某目录设置粘滞位后，<mark style="background: #FF5582A6;">普通用户就算有 w 权限也只能删除该目录下自己建立的文件，而不能删除其他用户建立的文件</mark>
+如果该其他用户权限位上有执行权限，则会在其他用户权限位的执行权限上写个 t（小写）；如果该其它用户权限位上没有执行权限，则会在其他用户权限位的执行权限上写个 T（大写）
+<mark style="background: #ABF7F7A6;">sbit数字权限是1000，设置方法：</mark>
+```shell
+方法1：
+[root@VM_0_9_centos ~]# chmod 1755 test/
+方法2：
+[root@VM_0_9_centos ~]# chmod o+t test/
+查看权限：
+[root@VM_0_9_centos ~]# ll -d test/
+drwxr-xr-t 2 root root 4096 Nov 22 21:15 test/
+```
+### 掩码 umask
+<mark style="background: #FF5582A6;">umask 值用于设置用户在创建文件时的默认权限</mark>，当我们在系统中创建目录或文件时，目录或文件所具有的默认权限就是由 umask 值决定的
+对于 root 用户，系统默认的 umask 值是0022；对于普通用户，系统默认的 umask 值是0002。执行 umask 命令可以查看当前用户的 umask 值
+
+> [!NOTE] umask 改变新建文件的访问权限
+> Umask 值一共有 4 组数字，其中第 1 组数字用于定义特殊权限，一般不予考虑，与一般权限有关的是后 3 组数字。
+> 默认情况下，<mark style="background: #FFB8EBA6;">对于目录，用户所能拥有的最大权限是 777</mark>；<mark style="background: #FFB8EBA6;">对于文件，用户所能拥有的最大权限是目录的最大权限去掉执行权限，即 666</mark>。因为 x 执行权限对于目录是必须的，没有执行权限就无法进入目录，而对于文件则不必默认赋予 x 执行权限
+> 对于 root 用户，他的 umask 值是 022。当 root 用户创建目录时，默认的权限就是用最大权限 777 去掉相应位置的 umask 值权限，即对于所有者不必去掉任何权限，对于所属组要去掉 w 权限，对于其他用户也要去掉 w 权限，所以目录的默认权限就是 755；当 root 用户创建文件时，默认的权限则是用最大权限 666 去掉相应位置的 umask 值，即文件的默认权限是644
+
+>umask 命令只能临时修改 umask 值，系统重启之后 umask 将还原成默认值。如果要永久修改 umask 值，可修改 <mark style="background: #FF5582A6;">/etc/bashrc</mark> 或 <mark style="background: #FF5582A6;">/etc/profile</mark> 文件
+>例如要将默认 umask 值设置为 027，那么可以在文件中增加一行 umask 027 
+
+
